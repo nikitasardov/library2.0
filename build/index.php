@@ -4,6 +4,7 @@
 
     $link = db_connect();
     $books = get_books_all($link);
+    //$books = get_books_all_old($link);
 
     include("views/catalog.php");
 ?>

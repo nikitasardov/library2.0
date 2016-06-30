@@ -19,35 +19,35 @@
 
                     <div class="catalog__card">
                         <div class="catalog__cardHeader">
-                            <h3 class="catalog__title">"<?=intro($book['title'], 36)?>"</h3>
-                            <h4 class="catalog__author"><?php if (empty($book['author'])) echo 'автор не указан'; else echo $book['author'];?></h4>
+                            <h3 class="catalog__title"><?=($num+1).'. "'.intro($book['BOOK_NAME'], 36)?>"</h3>
+                            <h4 class="catalog__author"><?php $book_authors = get_book_authors($link, $book['ID']); if (empty($book_authors)) echo 'автор не указан'; else echo $book_authors;?></h4>
                         </div>
-                        <a class="default__link--nodecoration canHide" href="<?php if(!empty($book['description'])) echo 'book.php?id='.$book['id']; else echo 'admin/index.php?action=edit&id='.$book['id']; if(isset($_GET['admin'])) echo '&admin';?>">                   
-                            <div class="book__description"><?php 
-                                if(empty($book['description'])) 
-                                        echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i>'; 
-                                else 
-                                        echo intro(($book['description']),50);?>
+                        <a class="default__link--nodecoration canHide" href="<?php if(!empty($book['BOOK_DESCRIPTION'])) echo 'book.php?id='.$book['ID']; else echo 'admin/index.php?action=edit&id='.$book['ID']; if(isset($_GET['admin'])) echo '&admin';?>">
+                            <div class="book__description"><?php
+                                if(empty($book['BOOK_DESCRIPTION']))
+                                        echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i>';
+                                else
+                                        echo intro(($book['BOOK_DESCRIPTION']),50);?>
                             </div>
-                            <div class="default__bookInfo">Книга добавлена: <?=intro($book['date'],16)?>
-                            <?php if (!empty($book['contributor'])) echo '<br>Добавил: '.$book['contributor'];?></div>
-                                <div class="default__button"><?php if(!empty($book['description'])) echo 'Просмотреть'; else echo 'Редактировать';?></div>
+                            <!--div class="default__bookInfo">Книга добавлена: <=intro($book['date'],16)?>
+                            <php if (!empty($book['contributor'])) echo '<br>Добавил: '.$book['contributor'];?></div-->
+                                <div class="default__button"><?php if(!empty($book['BOOK_DESCRIPTION'])) echo 'Просмотреть'; else echo 'Редактировать';?></div>
                 </a>
-                                
-                                
-                                
-                                
+
+
+
+
                         </a>
                     </div>
                 <?php $num++; endforeach ?>
             </div>
-            
+
             <div class="default__buttonContainer">
                 <a class="default__link--nodecoration default__button default__button--recomended" href="admin/index.php?action=add">Добавить книгу</a>
                 <a class="default__link--nodecoration default__button default__button--warning" href="admin">Редактор библиотеки</a>
             </div>
-            
+
            <div class="default__bookInfo">Книг в базе: <?php echo $num; ?></div>
         </div>
     </body>
-</html> 
+</html>
