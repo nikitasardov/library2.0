@@ -14,7 +14,7 @@
 
         for ($i = 0; $i < $n; $i++) {
             $row = mysqli_fetch_assoc($result);
-            $books[] = $row;
+            $books[$i] = $row;
         }
 
         return $books;
@@ -50,10 +50,10 @@
     }
 
 
-  function books_get_old($link, $id_book)
+  function get_book($link, $id_book)
   {
       //запрос
-      $query = sprintf("SELECT *  FROM books_old WHERE id=%d",(int)$id_book);
+      $query = sprintf("SELECT * FROM books WHERE id=%d",(int)$id_book);
       $result = mysqli_query($link, $query);
 
       if (!$result)
@@ -94,32 +94,81 @@
   }
 */
 
-/*
-  function books_edit($link, $id, $title, $author, $description, $change_date, $editor_IP){
+
+  function edit_book($link, $id, $title, $author, $description){
       //prepare
       $id = (int)$id;
       $title = trim($title);
-      $author = trim($author);
       $description  = trim($description);
-
 
       //check
       if ($title == '')
           return false;
 
       //request
-      $sql = "UPDATE books SET title='%s', author='%s', description='%s', change_date='%s', editor_IP='%s' WHERE id='%d'";
+      $sql = "UPDATE books SET BOOK_NAME='%s', description='%s' WHERE id='%d'";
 
-      $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $author), mysqli_real_escape_string($link, $description), mysqli_real_escape_string($link, $change_date), mysqli_real_escape_string($link, $editor_IP), $id);
+      $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $description);
 
       $result = mysqli_query($link, $query);
 
       if (!$result)
           die(mysqli_error($link));
-
+      //set_relations($id, set_authors(trim($author)));
       return mysqli_affected_rows($link);
   }
-*/
+
+function set_authors($authors){
+  /*
+  //prepare
+  $id = (int)$id;
+  $title = trim($title);
+  $description  = trim($description);
+
+  //check
+  if ($title == '')
+      return false;
+
+  //request
+  $sql = "UPDATE books SET BOOK_NAME='%s', description='%s' WHERE id='%d'";
+
+  $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $author), mysqli_real_escape_string($link, $description);
+
+  $result = mysqli_query($link, $query);
+
+  if (!$result)
+      die(mysqli_error($link));
+  set_relations($id, set_authors(trim($author)));
+  return mysqli_affected_rows($link);
+  */
+  //return $authors_arr;
+}
+
+function set_relations($authors){
+  /*
+  //prepare
+  $id = (int)$id;
+  $title = trim($title);
+  $description  = trim($description);
+
+  //check
+  if ($title == '')
+      return false;
+
+  //request
+  $sql = "UPDATE books SET BOOK_NAME='%s', description='%s' WHERE id='%d'";
+
+  $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $author), mysqli_real_escape_string($link, $description);
+
+  $result = mysqli_query($link, $query);
+
+  if (!$result)
+      die(mysqli_error($link));
+  set_relations($id, set_authors(trim($author)));
+  return mysqli_affected_rows($link);
+  */
+  //return true;
+}
 
 /*
   function books_delete($link, $id){

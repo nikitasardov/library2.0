@@ -1,6 +1,6 @@
 <!DOCTYPE html lang="ru">
 <html>
-       
+
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -17,28 +17,31 @@
             </div>
             <div class="catalog__listContainer">
                 <?php $num=0; foreach($books as $book): ?>
-                
+
                 <div class="catalog__card">
-                    <div class="catalog__cardHeader">
-                        <h3 class="catalog__title">"<?=intro($book['title'], 36)?>"</h3>
-                        <h4 class="catalog__author"><?php if (empty($book['author'])) echo 'автор не указан'; else echo $book['author'];?></h4>
-                    </div>
+                  <div class="catalog__cardHeader">
+                      <h3 class="catalog__title"><?=($num+1).'. "'.intro($book['BOOK_NAME'], 35)?>"</h3>
+                      <h4 class="catalog__author"><?php
+                      $book_authors = get_book_authors($link, $book['ID']);
+                      if (empty($book_authors)) echo 'автор не указан';
+                      else echo $book_authors;?></h4>
+                  </div>
                     <div class="canHide">
-                        <div class="book__description"><?php 
-                                if(empty($book['description'])) 
-                                        echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i></div>'; 
-                                else 
-                                        echo intro(($book['description']),50).'</div>';?>
-                        <div class="default__bookInfo">Книга добавлена: <?=$book['date']?>
-                        <br>Изменена: <?php if (empty($book['change_date'])) echo 'не редактировалась';
+                        <div class="book__description"><?php
+                                if(empty($book['BOOK_DESCRIPTION']))
+                                        echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i></div>';
+                                else
+                                        echo intro(($book['BOOK_DESCRIPTION']),50).'</div>';?>
+                        <!--div class="default__bookInfo">Книга добавлена: <=$book['date']?>
+                        <br>Изменена: <php if (empty($book['change_date'])) echo 'не редактировалась';
                                                     else echo $book['change_date'];?>
-                        <br>Добавил: <?php if (!empty($book['contributor'])) echo $book['contributor'];
+                        <br>Добавил: <php if (!empty($book['contributor'])) echo $book['contributor'];
                                                     else echo 'Неизвестный';?>
-                        </div>
+                        </div-->
                         <div class="default__line"></div>
-                        <a class="default__link--nodecoration catalog__editButton" href="index.php?action=edit&id=<?=$book['id']?>&admin">Редактировать</a> | 
-                        <a class="default__link--nodecoration catalog__deleteButton" href="index.php?action=delete&id=<?=$book['id']?>">Удалить</a>
-                        <a class="default__link--nodecoration default__button" href="../book.php?id=<?=$book['id']?>&admin">Просмотреть</a>
+                        <a class="default__link--nodecoration catalog__editButton" href="index.php?action=edit&id=<?=$book['ID']?>&admin">Редактировать</a> |
+                        <a class="default__link--nodecoration catalog__deleteButton" href="index.php?action=delete&id=<?=$book['ID']?>">Удалить</a>
+                        <a class="default__link--nodecoration default__button" href="../book.php?id=<?=$book['ID']?>&admin">Просмотреть</a>
                     </div>
                 </div>
                 <?php $num++; endforeach ?>
@@ -50,4 +53,4 @@
             <div class="default__bookInfo">Книг в базе: <?php echo $num; ?></div>
         </div>
     </body>
-</html> 
+</html>
