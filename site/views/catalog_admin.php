@@ -20,11 +20,11 @@
 
                 <div class="catalog__card">
                   <div class="catalog__cardHeader">
-                      <h3 class="catalog__title"><?=($num+1).'. "'.intro($book['BOOK_NAME'], 35)?>"</h3>
+                      <h3 class="catalog__title"><?=($num+1).'. "'.$book['BOOK_NAME'] ?>"</h3>
                       <h4 class="catalog__author"><?php
-                      $book_authors = get_book_authors($link, $book['ID']);
-                      if (empty($book_authors)) echo 'автор не указан';
-                      else echo $book_authors;?></h4>
+                          $current_book_authors = show_book_authors($book_authors, $book['ID']);
+                          if (empty($current_book_authors)) echo 'автор не указан';
+                          else echo $current_book_authors; ?></h4>
                   </div>
                     <div class="canHide">
                         <div class="book__description"><?php
