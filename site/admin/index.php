@@ -8,9 +8,14 @@ if (isset($_GET['action']))
 else
     $action = "";
 
+if (isset($_GET['dbrefresh'])) {
+    $_SESSION['active'] = false;
+    header("Location: index.php");
+}
+
 if ($action == "add") {
     if (!empty($_POST)) {
-        books_add($link, $_POST['title'], $_POST['author'], $_POST['description']);
+        books_add($_POST['title'], $_POST['description']);
         if (isset($_GET['admin'])) header("Location: index.php");
         else header("Location: ../index.php");
 
@@ -24,10 +29,10 @@ if ($action == "add") {
     $id = (int)$_GET['id'];
 
     if (!empty($_POST) && $id > 0) {
-        edit_book($link, $id, $_POST['title'], $_POST['author'], $_POST['description']);
+        edit_book($id, $_POST['title'], $_POST['description']);
         header("Location: index.php");
     }
-    $book = show_book_details($link, $id);
+    $book = show_book_details($books, $id);
     include("../views/book_edit.php");
 
 

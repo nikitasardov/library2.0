@@ -23,14 +23,14 @@ function get_all_data($link) //в разработке, не используе�
 }
 */
 
-function get_all_books($link)
+function get_all_books()
 {
     //запрос
-    $query = "SELECT * FROM books"; //выбираем все (*) из таблицы books, сортируем (ORDER) по id  в обратном порядке (DESC)
-    $result = mysqli_query($link, $query);
+    $query = "SELECT * FROM books ORDER by ID DESC "; //выбираем все (*) из таблицы books, сортируем (ORDER) по id  в обратном порядке (DESC)
+    $result = mysqli_query($_SESSION['link'], $query);
 
     if (!$result)
-        die(mysqli_error($link)); //если ошибка, останавливаем скрипт и выводим ошибку
+        die(mysqli_error($_SESSION['link'])); //если ошибка, останавливаем скрипт и выводим ошибку
 
     //Извлечение из БД
     $n = mysqli_num_rows($result); //кол-во строк в базе
@@ -44,13 +44,13 @@ function get_all_books($link)
     return $books;
 }
 
-function get_all_book_authors($link) //query!!получить все связи книга-автор. вызывается при загрузке "библиотеки", результаты хранятся в массиве $book_authors Не требуется напрягать базу, когда нужно получить список авторов для конкретной книги
+function get_all_book_authors() //query!!получить все связи книга-автор. вызывается при загрузке "библиотеки", результаты хранятся в массиве $book_authors Не требуется напрягать базу, когда нужно получить список авторов для конкретной книги
 {
     $query = "SELECT * FROM book_author, authors WHERE book_author.AUTHOR_ID = authors.AUTHOR_ID"; //выбираем все отношения книга-автор
-    $result = mysqli_query($link, $query);
+    $result = mysqli_query($_SESSION['link'], $query);
 
     if (!$result)
-        die(mysqli_error($link)); //если ошибка, останавливаем скрипт и выводим ошибку
+        die(mysqli_error($_SESSION['link'])); //если ошибка, останавливаем скрипт и выводим ошибку
 
     //Извлечение из БД
     $n = mysqli_num_rows($result); //кол-во строк в результате запроса
@@ -65,10 +65,10 @@ function get_all_book_authors($link) //query!!получить все связи
 
 }
 
-function show_book_authors($book_authors, $id_book) //NO QUERY!! возвращает список авторов в одной строке, через запятую. Выбирает авторов из массива $book_authors
+function show_book_authors($id_book) //NO QUERY!! возвращает список авторов в одной строке, через запятую. Выбирает авторов из массива $book_authors
 {
     $n = 0;
-    foreach ($book_authors as $book_author) {
+    foreach ($_SESSION['book_authors'] as $book_author) {
         if ($book_author['BOOK_ID'] == $id_book) {
             if ($n == 0) {
                 $comma = '';
@@ -82,39 +82,6 @@ function show_book_authors($book_authors, $id_book) //NO QUERY!! возвращ�
     return $authors_str;
 }
 
-/*
-function get_book_authors($link, $id_book) //query!! старый вариант функции. обращение к базе при выводе каждой книги в списке. Функция больше не используется.
-{
-    //запрос
-    $query = "SELECT * FROM book_author, authors WHERE book_author.BOOK_ID = " . $id_book . " AND book_author.AUTHOR_ID = authors.AUTHOR_ID ORDER BY BOOK_ID DESC"; //выбираем все (*) из таблиц books_author и author
-    $result = mysqli_query($link, $query);
-
-    if (!$result)
-        die(mysqli_error($link)); //если ошибка, останавливаем скрипт и выводим ошибку
-
-    //Извлечение из БД
-    $n = mysqli_num_rows($result); //кол-во строк в результате запроса
-    $authors = array(); //создаем пустой массив
-
-    for ($i = 0; $i < $n; $i++) {
-        $row = mysqli_fetch_assoc($result);
-        $authors[] = $row;
-    }
-    $n = 0;
-    foreach ($authors as $author) {
-        if ($n == 0) {
-            $comma = '';
-        } else {
-            $comma = ', ';
-        };
-        $authors_str = $authors_str . $comma . $author['AUTHOR_NAME'];
-        $n++;
-    }
-    return $authors_str;
-}
-*/
-
-
 function show_book_details($books, $id_book)
 {
     foreach ($books as $current_book) {
@@ -126,57 +93,39 @@ function show_book_details($books, $id_book)
     return $book;
 }
 
-
-/*
-function get_book($link, $id_book) //старый вариант функции. обращение к базе при выводе каждой книги в списке. Функция больше не используется.
+function books_add($title, $description)
 {
-    //запрос
-    $query = sprintf("SELECT * FROM books WHERE id=%d", (int)$id_book);
-    $result = mysqli_query($link, $query);
-
-    if (!$result)
-        die(mysqli_error($link));
-
-    $book = mysqli_fetch_assoc($result);
-
-    return $book;
-}
-*/
-
-/*
-
-  function books_add($link, $title, $author, $description, $date, $contributor, $contributor_IP){
-  //prepare
-  $title = trim($title);
-  $author = trim($author);
-  $description = trim($description);
-  $contributor = trim($contributor);
+    //prepare
+    $title = trim($title);
+    //$author = trim($author);
+    $description = trim($description);
+    //$contributor = trim($contributor);
+    $link = $_SESSION['link'];
 
 //    if (empty($contributor)) $contributor = 'Доброжелатель, опознанный по IP';
 
-  //check
-  if ($title == '')
-      return false;
+    //check
+    if ($title == '')
+        return false;
 
-  //request
-  $t = "INSERT INTO books (title, author, description, date, change_date, contributor, contributor_IP) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+    //request
+    $t = "INSERT INTO books (BOOK_NAME, GANRE_ID, SCHOOL_RECOMENDS, BOOK_DESCRIPTION) VALUES ('%s', '%s', '%s', '%s')";
+vd($_SESSION['link']);
+    $query = sprintf($t, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, '0'), mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $description));
 
-  $query =  sprintf($t, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $author), mysqli_real_escape_string($link, $description), mysqli_real_escape_string($link, $date), mysqli_real_escape_string($link, 'не редактировалась'), mysqli_real_escape_string($link, $contributor), mysqli_real_escape_string($link, $contributor_IP));
+    //    echo $query;
+    $result = mysqli_query($link, $query);
 
-  //    echo $query;
-      $result = mysqli_query($link, $query);
+    if (!$result) vd('что-то не так');
+        //die(mysqli_error($link));
 
-      if (!$result)
-          die(mysqli_error($link));
+    return true;
+}
 
-      return true;
-  }
-*/
-
-/*
-function edit_book($link, $id, $title, $author, $description)
+function edit_book($id, $title, $description)
 {
     //prepare
+    $link = $_SESSION['link'];
     $id = (int)$id;
     $title = trim($title);
     $description = trim($description);
@@ -186,9 +135,9 @@ function edit_book($link, $id, $title, $author, $description)
         return false;
 
     //request
-    $sql = "UPDATE books SET BOOK_NAME='%s', description='%s' WHERE id='%d'";
+    $sql = "UPDATE books SET BOOK_NAME='%s', BOOK_DESCRIPTION='%s' WHERE ID='%d'";
 
-    $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $description);
+    $query = sprintf($sql, mysqli_real_escape_string($link, $title), mysqli_real_escape_string($link, $description), $id);
 
     $result = mysqli_query($link, $query);
 
@@ -197,10 +146,12 @@ function edit_book($link, $id, $title, $author, $description)
     //set_relations($id, set_authors(trim($author)));
     return mysqli_affected_rows($link);
 }
-*/
 
-function current_book_authors($id_book){
-    $current_book_authors = show_book_authors($_SESSION['book_authors'],$id_book);
+
+
+function current_book_authors($id_book)
+{
+    $current_book_authors = show_book_authors($id_book);
     if (empty($current_book_authors))
         $result = 'автор не указан';
     else $result = $current_book_authors;

@@ -24,7 +24,8 @@ body {
 }
 
 form {
-    width: 100%
+    width: 100%;
+    padding: 5px;
 }
 
 button {
@@ -334,19 +335,20 @@ button {
 }
 
 .input__author:hover, .input__contributor:hover, .input__description:hover, .input__title:hover {
-    background-color: rgba(10, 148, 4, .6)
+    background-color: rgba(10, 148, 4, .6);
+    color: #fff;
 }
 
 .input__author:focus, .input__contributor:focus, .input__description:focus, .input__title:focus {
     color: #6f3206;
-    border: 3px solid #16bc0e;
+    border: 2px solid #16bc0e;
     background-color: rgba(255, 255, 255, .7)
 }
 
 .input__author:invalid, .input__contributor:invalid, .input__description:invalid, .input__title:invalid {
-    border: 3px solid tomato
+    border: 2px solid tomato
 }
 
 .input__author:valid, .input__contributor:valid, .input__description:valid, .input__title:valid {
-    border: 3px solid #16bc0e
+    border: 2px solid #16bc0e
 }
