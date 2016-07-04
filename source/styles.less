@@ -1,0 +1,326 @@
+@specialFont:  MicraDi, Verdana, Arial, sans-serif;
+@contentFont: Arial, Verdana, sans-serif;
+
+@font-face {
+  font-family: MicraDi;
+  src: local('MicraDi'),url(../fonts/micradi_regular.ttf) format('truetype')
+}
+
+body{
+  height: 100%;
+  color:  #fff;
+  overflow: hidden;
+}
+
+form {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+button {
+  padding: 0px;
+  margin: 0px;
+  border: 0;
+  background-color: transparent;
+}
+
+.default {
+  &__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    max-width: 600px;
+    margin: auto;
+    padding: 0px;
+    height: 97%;
+    border-radius: 10px;
+    background-color: #000;
+    box-shadow: 0 0 10px #000;
+    transition-property: all;
+    transition-duration: .3s;
+    background-image: url(../img/background.jpg);
+    background-position: left;
+    background-size: cover;
+  }
+
+  &__link--nodecoration {
+    text-decoration: none;
+    color: #fff;
+  }
+
+
+  &__header {
+    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(131, 73, 33, .7);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    border-radius: 5px 5px 0 0;
+    z-index: 2;
+
+    &--1 {
+      padding: 0;
+      margin: auto;
+      text-shadow: 0 0 20px black;
+      font-family: @specialFont;
+    }
+    &--2 {
+      padding: 0;
+      margin: auto;
+      text-shadow: 0 0 20px black;
+      font-family: @specialFont;
+    }
+  }
+  &__bookInfo {
+    margin: 5px 7px 2px;
+    font-size: 10px;
+    color: #fff;
+    display: block;
+    font-family: @specialFont;
+    font-weight: 100;
+  }
+
+  &__buttonContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-family: @specialFont;
+    z-index: 2;
+  }
+
+  &__button {
+    display: inline-block;
+    margin: 3px;
+    width: 250px;
+    padding: 6px 0px;
+    border: 3px solid #fff;
+    border-radius: 3px;
+    background-color: rgba(131, 73, 33, .7);
+    color: #fff;
+    transition-property: all;
+    transition-duration: .3s;
+    font-family: MicraDi;
+    font-size: 16px;
+    text-align: center;
+    text-shadow: 0 0 10px black;
+    &:hover {
+      /*background: green;*/
+      background-color: rgba(218, 141, 23, .7);
+    }
+    &--warning {
+      &:hover{
+        background-color: tomato;
+        color: black;
+      }
+    }
+    &--recomended {
+      &:hover{
+        text-shadow: 0 0 10px greenyellow;
+      }
+    }
+  }
+
+  &__line {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: #eee;
+  }
+
+  &--warning {
+    text-shadow: 0 0 20px black;
+    color: tomato;
+  }
+
+  &--recomended {
+    text-shadow: 0 0 10px greenyellow;
+  }
+
+}
+
+.hide {
+  display: none;
+}
+
+.catalog {
+  &__listContainer {
+    height: 70%;
+    width: 100%;
+    box-shadow: 0 0 20px #fff inset;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0;
+  }
+
+  &__card {
+    background-color: rgba(0, 0, 0, .3);
+    /*color: rgb(111, 50, 6);*/
+    border-radius: 10px;
+    box-shadow: 0 0 5px #eee;
+    margin: 0 0 5px;
+    width: 100%;
+    padding: 0 0 5px;
+    overflow: hidden;
+    font-family: @contentFont;
+  }
+
+  &__cardHeader {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .4);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__title{
+    margin: 0px 15px 5px;
+    font-weight: lighter;
+    padding: 4px 7px 2px;
+  }
+
+  &__author{
+    margin: 0px 0px 5px;
+    font-weight: bold;
+    padding: 0px 7px;
+  }
+
+  &--showBook{
+    font-weight: bolder;
+    font-family: @contentFont;
+  }
+
+  .adminButton(){
+    transition-property: background-color;
+    transition-duration: .3s;
+    padding: 0 10px;
+    &:hover {
+      background-color: tomato;
+    }
+  }
+
+  &__editButton {
+    .adminButton;
+  }
+
+  &__deleteButton {
+    .adminButton;
+  }
+}
+
+.book {
+
+  &__card {
+    background-color: rgba(0, 0, 0, .3);
+    /*color: rgb(111, 50, 6);*/
+    border-radius: 10px;
+    margin: 5px;
+    width: 100%;
+    padding: 0px;
+    overflow: hidden;
+    font-family: @contentFont;
+  }
+
+  &__card--form {
+    background-color: rgba(0, 0, 0, .3);
+    /*color: rgb(111, 50, 6);*/
+    border-radius: 10px;
+    margin: auto;
+    width: 97%;
+    padding: 0px;
+    overflow-x: hidden;
+    font-family: @contentFont;
+  }
+
+  &__title{
+    margin: 0px 0 5px;
+    font-weight: lighter;
+    background-color: rgba(0, 0, 0, .4);
+    padding: 4px 7px 2px;
+  }
+
+  &__author{
+    text-shadow: 0 0 20px #fff;
+    margin: 0px 5px;
+    font-weight: bold;
+    padding: 0px 2px;
+  }
+
+  &__description{
+    margin: 0px 5px;
+    font-weight: normal;
+    padding: 5px 0px;
+    &--read{
+      max-height: 30%;
+      margin: 0px 5px;
+      font-weight: normal;
+      padding: 5px 0px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+    }
+  }
+}
+
+.input {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-content: stretch;
+  .input() {
+    margin-bottom: 10px;
+    padding: 2px 5px;
+    vertical-align: middle;
+    border: 2px solid rgb(111, 50, 6);
+    background-color: rgba(255, 255, 255, .7);
+    border-radius: 5px;
+    color: rgb(111, 50, 6);
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    transition-property: all;
+    transition-duration: .3s;
+  }
+
+  &__title, &__author, &__contributor {
+    .input;
+    height: 30px;
+  }
+
+  &__description {
+    .input;
+    height: 100px;
+    resize: none;
+  }
+
+  &__title:hover, &__author:hover, &__contributor:hover, &__description:hover {
+    background-color: rgba(10, 148, 4, .6);
+
+  }
+
+  &__title:focus, &__author:focus, &__contributor:focus, &__description:focus {
+    color: rgb(111, 50, 6);
+    border: 3px solid rgb(22, 188, 14);
+    background-color: rgba(255, 255, 255, .7);
+  }
+
+
+  &__title:invalid, &__author:invalid, &__contributor:invalid, &__description:invalid {
+    border: 3px solid tomato;
+  }
+
+  &__title:valid, &__author:valid, &__contributor:valid, &__description:valid {
+    border: 3px solid rgb(22, 188, 14);
+  }
+}
