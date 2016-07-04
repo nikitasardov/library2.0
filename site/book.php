@@ -1,9 +1,6 @@
 <?php
-    require_once("database.php");
-    require_once("models/functions.php");
-
-    $link = db_connect();
-    $book = get_book($link, $_GET['id']);
+    require_once("functions.php");
+    require_once("session.php");
 
     include("views/book.php");
 ?>

@@ -23,9 +23,10 @@ function get_all_data($link) //в разработке, не используе�
 }
 */
 
-function get_all_books($link){
+function get_all_books($link)
+{
     //запрос
-    $query = "SELECT * FROM books, ganres WHERE books.GANRE_ID = ganres.GANRE_ID ORDER BY ID DESC"; //выбираем все (*) из таблицы books, сортируем (ORDER) по id  в обратном порядке (DESC)
+    $query = "SELECT * FROM books"; //выбираем все (*) из таблицы books, сортируем (ORDER) по id  в обратном порядке (DESC)
     $result = mysqli_query($link, $query);
 
     if (!$result)
@@ -45,7 +46,7 @@ function get_all_books($link){
 
 function get_all_book_authors($link) //query!!получить все связи книга-автор. вызывается при загрузке "библиотеки", результаты хранятся в массиве $book_authors Не требуется напрягать базу, когда нужно получить список авторов для конкретной книги
 {
-    $query = "SELECT * FROM book_author, authors WHERE book_author.AUTHOR_ID = authors.AUTHOR_ID ORDER BY BOOK_ID DESC"; //выбираем все отношения книга-автор
+    $query = "SELECT * FROM book_author, authors WHERE book_author.AUTHOR_ID = authors.AUTHOR_ID"; //выбираем все отношения книга-автор
     $result = mysqli_query($link, $query);
 
     if (!$result)
@@ -113,8 +114,21 @@ function get_book_authors($link, $id_book) //query!! старый вариант
 }
 */
 
+
+function show_book_details($books, $id_book)
+{
+    foreach ($books as $current_book) {
+        if ($current_book['ID'] == $id_book) {
+            $book = $current_book;
+            break;
+        }
+    }
+    return $book;
+}
+
+
 /*
-function get_book($link, $id_book)
+function get_book($link, $id_book) //старый вариант функции. обращение к базе при выводе каждой книги в списке. Функция больше не используется.
 {
     //запрос
     $query = sprintf("SELECT * FROM books WHERE id=%d", (int)$id_book);
@@ -128,6 +142,7 @@ function get_book($link, $id_book)
     return $book;
 }
 */
+
 /*
 
   function books_add($link, $title, $author, $description, $date, $contributor, $contributor_IP){
@@ -184,6 +199,13 @@ function edit_book($link, $id, $title, $author, $description)
 }
 */
 
+function current_book_authors($id_book){
+    $current_book_authors = show_book_authors($_SESSION['book_authors'],$id_book);
+    if (empty($current_book_authors))
+        $result = 'автор не указан';
+    else $result = $current_book_authors;
+    return $result;
+}
 
 function set_authors($authors)
 {
@@ -211,7 +233,6 @@ function set_authors($authors)
     */
     //return $authors_arr;
 }
-
 
 
 function set_relations($authors)
@@ -271,7 +292,8 @@ function intro($text, $l)
 }
 
 
-function vd($var){
+function vd($var)
+{
     var_dump($var);
     die;
 }

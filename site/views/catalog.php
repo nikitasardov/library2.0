@@ -22,10 +22,7 @@
             <div class="catalog__card">
                 <div class="catalog__cardHeader">
                     <h3 class="catalog__title"><?= ($num + 1) . '. "' . $book['BOOK_NAME'] ?>"</h3>
-                    <h4 class="catalog__author"><?php
-                        $current_book_authors = show_book_authors($book_authors, $book['ID']);
-                        if (empty($current_book_authors)) echo 'автор не указан';
-                        else echo $current_book_authors; ?></h4>
+                    <h4 class="catalog__author"><?php echo current_book_authors($book['ID']);?></h4>
                 </div>
                 <a class="default__link--nodecoration canHide" href="<?php
                 if (!empty($book['BOOK_DESCRIPTION']))
