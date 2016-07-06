@@ -29,7 +29,7 @@
                     if (empty($book['BOOK_DESCRIPTION']))
                         echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i></div>';
                     else
-                        echo intro(($book['BOOK_DESCRIPTION']), 50) . '</div>'; ?>
+                        echo $book['BOOK_DESCRIPTION']. '</div>'; ?>
                     <!--div class="default__bookInfo">Книга добавлена: <=$book['date']?>
                     <br>Изменена: <php if (empty($book['change_date'])) echo 'не редактировалась';
                                                 else echo $book['change_date'];?>

@@ -1,6 +1,7 @@
 <?php
 
 require_once("../functions.php");
+require_once("../database.php");
 require_once("../session.php");
 
 if (isset($_GET['action']))
@@ -15,7 +16,8 @@ if (isset($_GET['dbrefresh'])) {
 
 if ($action == "add") {
     if (!empty($_POST)) {
-        books_add($_POST['title'], $_POST['description']);
+        books_add($_POST['title']);
+        $_SESSION['active'] = false;
         if (isset($_GET['admin'])) header("Location: index.php");
         else header("Location: ../index.php");
 
@@ -29,7 +31,8 @@ if ($action == "add") {
     $id = (int)$_GET['id'];
 
     if (!empty($_POST) && $id > 0) {
-        edit_book($id, $_POST['title'], $_POST['description']);
+        edit_book($id, $_POST['title'], $_POST['author'], $_POST['description']);
+        $_SESSION['active'] = false;
         header("Location: index.php");
     }
     $book = show_book_details($books, $id);
@@ -42,7 +45,8 @@ if ($action == "add") {
     $id = (int)$_GET['id'];
 
     if (!empty($_POST) && ($id > 0) && ($_GET['confirm'] == 1)) {
-        books_delete($link, $id);
+        books_delete($id);
+        $_SESSION['active'] = false;
         header("Location: index.php");
     }
 
