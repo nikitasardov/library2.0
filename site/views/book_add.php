@@ -17,8 +17,8 @@
     <form method="post" action="index.php?action=add<?php if (isset($_GET['admin'])) echo '&admin'; ?>">
         <div class="input">
             <input class="input__title" name="title" type="search" placeholder="Название книги" required autofocus>
-            <!--input class="input__author" name="author" type="search" placeholder="Автор"-->
-            <!--textarea class="input__description" name="description" placeholder="Фрагмент (по желанию)"></textarea-->
+            <input class="input__author" name="author" type="search" placeholder="Автор">
+            <textarea class="input__description" name="description" placeholder="Фрагмент (по желанию)"></textarea>
             <!--input class="input__contributor" name="contributor" type="search" placeholder="Ваше имя (по желанию)"-->
         </div>
         <!--

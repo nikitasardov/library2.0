@@ -16,7 +16,7 @@ if (isset($_GET['dbrefresh'])) {
 
 if ($action == "add") {
     if (!empty($_POST)) {
-        books_add($_POST['title']);
+        books_add($_POST['title'], $_POST['author'], $_POST['description']);
         $_SESSION['active'] = false;
         if (isset($_GET['admin'])) header("Location: index.php");
         else header("Location: ../index.php");
