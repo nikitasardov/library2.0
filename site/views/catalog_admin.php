@@ -12,7 +12,7 @@
 <body>
 <div class="default__container">
     <div class="default__header">
-        <h1 class="default__header--1">Библиотека</h1>
+        <h1 class="default__header--1">Библиотека 2.0</h1>
         <h2 class="default__header--2 default--warning">Редактор</h2>
     </div>
     <div class="catalog__listContainer">

@@ -16,7 +16,8 @@ if (isset($_GET['dbrefresh'])) {
 
 if ($action == "add") {
     if (!empty($_POST)) {
-        books_add($_POST['title'], $_POST['author'], $_POST['description']);
+        $new_book_id = books_add($_POST['title'], $_POST['description']);
+        set_authors($new_book_id, $_POST['author']);
         $_SESSION['active'] = false;
         if (isset($_GET['admin'])) header("Location: index.php");
         else header("Location: ../index.php");
@@ -31,7 +32,9 @@ if ($action == "add") {
     $id = (int)$_GET['id'];
 
     if (!empty($_POST) && $id > 0) {
-        edit_book($id, $_POST['title'], $_POST['author'], $_POST['description']);
+        edit_book($id, $_POST['title'], $_POST['description']);
+        if ($_SESSION['current_book_authors'] != trim($_POST['author']))
+            set_authors($id, $_POST['author']);
         $_SESSION['active'] = false;
         header("Location: index.php");
     }

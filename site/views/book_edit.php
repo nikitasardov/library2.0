@@ -11,14 +11,19 @@
 <body>
 <div class="default__container">
     <div class="default__header">
-        <h2 class="default__header--2 default--warning">Редактировать</h2>
+        <h1 class="default__header--1">Библиотека 2.0</h1>
+    </div>
+    <div class="default__header">
+        <h2 class="default__header--2 default--warning">Редактировать книгу</h2>
     </div>
     <form method="post" action="index.php?action=edit&id=<?php echo $book['ID']; ?>">
         <div class="input">
             <input class="input__title" name="title" type="text" placeholder="Название книги" value="<?php
             echo $book['BOOK_NAME']; ?>" required>
-            <input class="input__author" name="author" type="text" placeholder="Автор" value="<?php
-            echo show_book_authors($book['ID']);?>" required>
+            <div class="book__description" style="background-color: rgba(0, 0, 0, .4); padding: 5px;border-radius: 5px; margin-bottom: 5px;">Отредактируйте список авторов. <br>Используйте символы-разделители: , / &quot; | + = ; : # @ % ` ~</div>
+            <input class="input__author" name="author" type="text" placeholder="Авторы (используйте символы-разделители: , / &quot; | + = ; : # @ % ` ~)" value="<?php
+            $_SESSION['current_book_authors'] = show_book_authors($book['ID']); //сохраняем авторов до редактирования, потом сравним и узнаем, есть ли изменения
+            echo $_SESSION['current_book_authors'];?>" required>
             <textarea class="input__description" name="description" placeholder="Фрагмент (по желанию)"
                               autofocus required><?php echo $book['BOOK_DESCRIPTION']; ?></textarea>
         </div>
