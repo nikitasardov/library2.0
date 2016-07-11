@@ -16,7 +16,7 @@ if (isset($_GET['dbrefresh'])) {
 
 if ($action == "add") {
     if (!empty($_POST)) {
-        $new_book_id = books_add($_POST['title'], $_POST['description']);
+        $new_book_id = add_book($_POST['title'], $_POST['description']);
         set_authors($new_book_id, $_POST['author']);
         $_SESSION['active'] = false;
         if (isset($_GET['admin'])) header("Location: index.php");
@@ -48,7 +48,7 @@ if ($action == "add") {
     $id = (int)$_GET['id'];
 
     if (!empty($_POST) && ($id > 0) && ($_GET['confirm'] == 1)) {
-        books_delete($id);
+        delete_book($id);
         $_SESSION['active'] = false;
         header("Location: index.php");
     }
