@@ -14,7 +14,7 @@
     </div>
     <div class="book__card">
         <h2 class="book__title">"<?php echo $book['BOOK_NAME']; ?>"</h2>
-        <h3 class="book__author"><?php echo current_book_authors($book['ID']);?></h3>
+        <h3 class="book__author"><?php echo show_book_authors($book['ID']);?></h3>
         <div class="default__line"></div>
         <div class="book__description<?php if (mb_strlen($book['BOOK_DESCRIPTION']) > 600) echo '--read' ?>">
 

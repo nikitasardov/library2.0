@@ -44,7 +44,7 @@ function get_all_books()
     return $books;
 }
 
-function show_book_details($books, $id_book)
+function get_book_details($books, $id_book)
 {
     foreach ($books as $current_book) {
         if ($current_book['ID'] == $id_book) {
@@ -54,7 +54,6 @@ function show_book_details($books, $id_book)
     }
     return $book;
 }
-
 
 function get_all_book_author_relations() //query!!получить все связи книга-автор. вызывается при загрузке "библиотеки", результаты хранятся в массиве $book_authors Не требуется напрягать базу, когда нужно получить список авторов для конкретной книги
 {
@@ -79,6 +78,7 @@ function get_all_book_author_relations() //query!!получить все свя
 
 function get_book_author_relation_id($book_id, $author_id)
 {
+    /*
     $query = "SELECT * FROM book_author";
     $result = mysqli_query($_SESSION['link'], $query);
 
@@ -93,7 +93,9 @@ function get_book_author_relation_id($book_id, $author_id)
         $row = mysqli_fetch_assoc($result);
         $relations[] = $row;
     }
-    foreach ($relations as $relation) {
+    */
+    if ($_SESSION['active'] == false) $_SESSION['book_authors'] = get_all_book_author_relations();
+    foreach ($_SESSION['book_authors'] as $relation) {
         if ($relation['BOOK_ID'] == $book_id)
             if ($relation['AUTHOR_ID'] == $author_id) return $relation['RELATION_ID'];
     }
@@ -104,30 +106,15 @@ function get_book_author_relation_id($book_id, $author_id)
 
 function relation_exists($book_id, $author_id)
 {
-   /* $query = "SELECT * FROM book_author";
-    $result = mysqli_query($_SESSION['link'], $query);
-
-    if (!$result)
-        die(mysqli_error($_SESSION['link'])); //если ошибка, останавливаем скрипт и выводим ошибку
-
-    //Извлечение из БД
-    $n = mysqli_num_rows($result); //кол-во строк в результате запроса
-    $relations = array(); //создаем пустой массив
-
-    for ($i = 0; $i < $n; $i++) {
-        $row = mysqli_fetch_assoc($result);
-        $relations[] = $row;
-    }*/
+    if ($_SESSION['active'] == false) $_SESSION['book_authors'] = get_all_book_author_relations();
     foreach ($_SESSION['book_authors'] as $relation) {
-        if (($relation['BOOK_ID'] == $book_id)&&($relation['AUTHOR_ID'] == $author_id)) return true;
+        if (($relation['BOOK_ID'] == $book_id) && ($relation['AUTHOR_ID'] == $author_id)) return true;
     }
-
     return false;
 }
 
 function set_relations($book_id, $author_id)
 {
-    if (relation_exists($book_id, $author_id)) return false;
     //request
     $sql = "INSERT INTO book_author (BOOK_ID, AUTHOR_ID) VALUES ('%s', '%s')";
 
@@ -156,24 +143,48 @@ function relation_delete($id)
     return mysqli_affected_rows($_SESSION['link']);
 }
 
-function clean_book_author_relations()
+
+
+function update_relations($book_id, $new_authors_list)
 {
-    $query = "SELECT * FROM book_author, authors WHERE book_author.AUTHOR_ID = authors.AUTHOR_ID"; //выбираем все отношения книга-автор
-    $result = mysqli_query($_SESSION['link'], $query);
+    $current_authors_array = parse_input($_SESSION['show_book_authors']);
+    $new_authors_array = parse_input($new_authors_list);
 
-    if (!$result)
-        die(mysqli_error($_SESSION['link'])); //если ошибка, останавливаем скрипт и выводим ошибку
-
-    //Извлечение из БД
-    $n = mysqli_num_rows($result); //кол-во строк в результате запроса
-    $book_authors = array(); //создаем пустой массив
-
-    for ($i = 0; $i < $n; $i++) {
-        $row = mysqli_fetch_assoc($result);
-        $book_authors[] = $row;
+    //удаление более не нужных связей
+    foreach ($current_authors_array as $current_author) {
+        $author_confirmed = false;
+        foreach ($new_authors_array as $new_author) {
+            if ($current_author == $new_author) {
+                $author_confirmed = true;
+                //  break;
+            }
+            echo 'author confirmed status: '.$author_confirmed.'<br>';
+        }
+        if (!$author_confirmed) {
+            $relation_id = get_book_author_relation_id($book_id, get_author_id($current_author));
+            echo 'relation ID: '.$relation_id.'<br>';
+            relation_delete($relation_id);
+            $_SESSION['active'] = false;
+        }
     }
-
-    return $book_authors;
+    //добавление новых авторов и создание новых связей
+    foreach ($new_authors_array as $new_author) {
+        echo $new_author.' =? ';
+        $new_author_confirmed = true;
+        foreach ($current_authors_array as $current_author) {
+            echo $current_author.' ? <br>';
+            if ($current_author == $new_author) {
+                $new_author_confirmed = false;
+                echo $current_author.' not new<br>';
+                //  break;
+            }
+        }
+        if ($new_author_confirmed) {
+            set_author($book_id, $new_author);
+            $_SESSION['active'] = false;
+        }
+    }
+    return true;
 
 }
 
@@ -224,7 +235,7 @@ function get_author_id($current_author)
     return false;
 }
 
-function show_book_authors($id_book) //NO QUERY!! возвращает список авторов в одной строке, через запятую. Выбирает авторов из массива $book_authors
+function current_book_authors($id_book) //NO QUERY!! возвращает список авторов в одной строке, через запятую. Выбирает авторов из массива $book_authors
 {
     $n = 0;
     $authors_str = '';
@@ -242,9 +253,9 @@ function show_book_authors($id_book) //NO QUERY!! возвращает спис�
     return $authors_str;
 }
 
-function current_book_authors($id_book) //выводит список авторов книги. если нет\указаны авторы, выводит сообщние 'автор не указан';
+function show_book_authors($id_book) //выводит список авторов книги. если нет\указаны авторы, выводит сообщние 'автор не указан';
 {
-    $current_book_authors = show_book_authors($id_book);
+    $current_book_authors = current_book_authors($id_book);
     if (empty($current_book_authors))
         $result = 'автор не указан';
     else $result = $current_book_authors;
@@ -267,39 +278,26 @@ function add_author($author) //возвращает ID нового автора
     $new_author_id = mysqli_insert_id($_SESSION['link']);
 
     if (!$result)
-    die(mysqli_error($_SESSION['link']));
+        die(mysqli_error($_SESSION['link']));
 
     return $new_author_id;
 }
 
-
-function parse_input($string){
+function parse_input($string)
+{
     $delimiters = ',/"|+;:#@%`';
-    //$delimiters = ' ,';
-    //mb_substr($str, 0, 1);
-    /*if (strpos($string, ',') !== false) $delimiter = ',';
-    elseif ((strpos($string, '/') !== false)) $delimiter = '/';
-    elseif ((strpos($string, '\\') !== false)) $delimiter = '\\';
-    elseif ((strpos($string, '|') !== false)) $delimiter = '|';
-    elseif ((strpos($string, '+') !== false)) $delimiter = '+';
-    elseif ((strpos($string, '-') !== false)) $delimiter = '-';
-    elseif ((strpos($string, '=') !== false)) $delimiter = '=';
-    elseif ((strpos($string, ';') !== false)) $delimiter = ';';
-    elseif ((strpos($string, ':') !== false)) $delimiter = ':';
-    elseif ((strpos($string, '#') !== false)) $delimiter = '#';
-    */
-    $string = ','.$string;
+    $string = ',' . $string;
     //vd($string);
     $array = array();
     $n = 0;
     $array[$n] = trim(strtok($string, $delimiters));
-    echo $n.':'.$array[$n].'<br>';
+    //echo $n.':'.$array[$n].'<br>';
     $swap = strtok($delimiters);
     while ($swap !== false) {
         $n++;
         $array[$n] = trim($swap);
         $swap = strtok($delimiters);
-        echo $n.':'.$array[$n].'<br>';
+        //echo $n.':'.$array[$n].'<br>';
     }
     //die;
     return $array;
@@ -331,21 +329,35 @@ function books_add($title, $description)
     return $new_book_id;
 }
 
-function set_authors($book_id, $author_string){
+function set_authors($book_id, $author_string)
+{
     if ($author_string != '') {
         $authors_array = parse_input($author_string); //здесь строка с авторами будет разобрана в массив.
         //цикл, перебирающий массив с авторами:
         foreach ($authors_array as $single_author) {
+            set_author($book_id, $single_author);
+            /*
             if (!author_exists($single_author))
                 $current_author_id = add_author($single_author);
             else $current_author_id = get_author_id($single_author);//если автор существует, вернуть id и добавить запись о новом отношении
             //vd($new_author_id);
             set_relations($book_id, $current_author_id);
+            */
         }
     }
     return true;
 }
 
+function set_author($book_id, $single_author)
+{
+    if (!author_exists($single_author))
+        $current_author_id = add_author($single_author);
+    else $current_author_id = get_author_id($single_author);//если автор существует, вернуть id и добавить запись о новом отношении
+    //vd($new_author_id);
+    if (!relation_exists($book_id, $current_author_id))
+        set_relations($book_id, $current_author_id);
+    return true;
+}
 
 function edit_book($id, $title, $description)
 {
@@ -377,7 +389,6 @@ function edit_book($id, $title, $description)
     return mysqli_affected_rows($link);
 }
 
-
 function books_delete($id)
 {
     $id = (int)$id;
@@ -396,7 +407,6 @@ function books_delete($id)
 
     return mysqli_affected_rows($_SESSION['link']);
 }
-
 
 function intro($text, $l)
 {

@@ -22,8 +22,8 @@
             echo $book['BOOK_NAME']; ?>" required>
             <div class="book__description" style="background-color: rgba(0, 0, 0, .4); padding: 5px;border-radius: 5px; margin-bottom: 5px;">Отредактируйте список авторов. <br>Используйте символы-разделители: , / &quot; | + = ; : # @ % ` ~</div>
             <input class="input__author" name="author" type="text" placeholder="Авторы (используйте символы-разделители: , / &quot; | + = ; : # @ % ` ~)" value="<?php
-            $_SESSION['current_book_authors'] = show_book_authors($book['ID']); //сохраняем авторов до редактирования, потом сравним и узнаем, есть ли изменения
-            echo $_SESSION['current_book_authors'];?>" required>
+            $_SESSION['show_book_authors'] = current_book_authors($book['ID']); //сохраняем авторов до редактирования, потом сравним и узнаем, есть ли изменения
+            echo $_SESSION['show_book_authors'];?>" required>
             <textarea class="input__description" name="description" placeholder="Фрагмент (по желанию)"
                               autofocus required><?php echo $book['BOOK_DESCRIPTION']; ?></textarea>
         </div>

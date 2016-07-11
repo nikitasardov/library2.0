@@ -33,12 +33,12 @@ if ($action == "add") {
 
     if (!empty($_POST) && $id > 0) {
         edit_book($id, $_POST['title'], $_POST['description']);
-        if ($_SESSION['current_book_authors'] != trim($_POST['author']))
-            set_authors($id, $_POST['author']);
+        if ($_SESSION['show_book_authors'] != trim($_POST['author']))
+            update_relations($id, $_POST['author']);
         $_SESSION['active'] = false;
         header("Location: index.php");
     }
-    $book = show_book_details($books, $id);
+    $book = get_book_details($books, $id);
     include("../views/book_edit.php");
 
 
@@ -53,7 +53,7 @@ if ($action == "add") {
         header("Location: index.php");
     }
 
-    $book = show_book_details($books, $id);
+    $book = get_book_details($books, $id);
     include("../views/book_delete.php");
 
 } else {
