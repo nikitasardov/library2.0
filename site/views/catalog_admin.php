@@ -48,13 +48,13 @@
             <?php $num++;
             endforeach ?>
         </div>
-        <div class="default__buttonContainer">
+        <div class="default__buttonContainer" style="width: 100%">
             <a class="default__link--nodecoration default__button default__button--recomended"
                href="index.php?action=add&admin">Добавить книгу</a>
-            <a class="default__link--nodecoration default__button default__button--recomended" href="..">Каталог</a>
+            <!--a class="default__link--nodecoration default__button default__button--recomended" href="..">Каталог</a-->
         </div>
 
-        <a href="index.php?dbrefresh" class="default__link--nodecoration"><div class="default__bookInfo">Книг в базе: <?php echo $num; ?></div></a>
+        <a href="index.php?dbrefresh" class="default__link--nodecoration"><div class="default__bookInfo" style="font-size: 16px">Книг в базе: <?php echo $num; ?></div></a>
     </div>
 </body>
 </html>

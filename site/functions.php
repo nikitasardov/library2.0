@@ -338,6 +338,7 @@ function delete_book($id) //удалить книгу по ID
 {
     $id = (int)$id;
     $_SESSION['link'] = db_connect();
+    $_SESSION['show_book_authors'] = current_book_authors($id); //будет использовано при удалении связей
     //check
     if ($id == 0)
         return false;
@@ -345,7 +346,21 @@ function delete_book($id) //удалить книгу по ID
     $query = sprintf("DELETE FROM books WHERE id='%d'", $id);
     $result = mysqli_query($_SESSION['link'], $query);
     if (!$result) die(mysqli_error($_SESSION['link']));
+    delete_book_author_relations($id);
     return mysqli_affected_rows($_SESSION['link']);
+}
+
+function delete_book_author_relations($book_id) //удаляет связи книга-автор по ID книги
+{
+    $authors_array = parse_input($_SESSION['show_book_authors']);
+
+    //удаление более не нужных связей
+    foreach ($authors_array as $current_author) {
+            $relation_id = get_book_author_relation_id($book_id, get_author_id($current_author));
+            //echo 'relation ID: '.$relation_id.'<br>';
+            relation_delete($relation_id);
+            $_SESSION['active'] = false;
+    }
 }
 
 function intro($text, $l) //возвращает короткий текст ...
