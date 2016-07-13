@@ -247,7 +247,7 @@ function add_author($author) //на входе имя нового автора.
 
 function parse_input($string) //на входе строка $string и разделители $delimiters. На выходе массив из элементов строки.
 {
-    $delimiters = ',/"|+;:#@%`';
+    $delimiters = ',/"|+=;:#@%`';
     $string = ',' . $string;
     //vd($string);
     $array = array();

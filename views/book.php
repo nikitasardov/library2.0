@@ -10,7 +10,10 @@
 <body>
 <div class="default__container">
     <div class="default__header">
-        <h1 class="default__header--1<?php if (isset($_GET['admin'])) echo ' default--warning'; ?>">Описание</h1>
+        <h1 class="default__header--1">Библиотека 2.0</h1>
+    </div>
+    <div class="default__header">
+        <h1 class="default__header--1<?php if (isset($_GET['admin'])) echo ' default--warning'; ?>">Описание книги</h1>
     </div>
     <div class="book__card">
         <h2 class="book__title">"<?php echo $book['BOOK_NAME']; ?>"</h2>
