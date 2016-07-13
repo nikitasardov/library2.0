@@ -14,7 +14,7 @@ body{
 
 form {
   width: 100%;
-  padding: 0;
+  padding: 5px;
   margin: 0;
 }
 button {
@@ -306,21 +306,22 @@ button {
 
   &__title:hover, &__author:hover, &__contributor:hover, &__description:hover {
     background-color: rgba(10, 148, 4, .6);
+    color: #fff;
 
   }
 
   &__title:focus, &__author:focus, &__contributor:focus, &__description:focus {
     color: rgb(111, 50, 6);
-    border: 3px solid rgb(22, 188, 14);
+    border: 2px solid rgb(22, 188, 14);
     background-color: rgba(255, 255, 255, .7);
   }
 
 
   &__title:invalid, &__author:invalid, &__contributor:invalid, &__description:invalid {
-    border: 3px solid tomato;
+    border: 2px solid tomato;
   }
 
   &__title:valid, &__author:valid, &__contributor:valid, &__description:valid {
-    border: 3px solid rgb(22, 188, 14);
+    border: 2px solid rgb(22, 188, 14);
   }
 }
