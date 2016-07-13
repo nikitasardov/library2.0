@@ -4,7 +4,7 @@
 function get_all_data($link) //в разработке, не используется
 {
     //запрос
-    $query = "SELECT * FROM books, book_author, authors, ganres WHERE books.ID = book_author.BOOK_ID AND book_author.BOOK_ID = authors.AUTHOR_ID AND books.GANRE_ID = ganres.GANRE_ID ORDER BY ID DESC"; //выбираем все (*) из таблиц books, book_author, authors, ganres сортируем (ORDER) по id  в обратном порядке (DESC)
+    $query = "SELECT * FROM books, book_author, authors, genres WHERE books.ID = book_author.BOOK_ID AND book_author.BOOK_ID = authors.AUTHOR_ID AND books.GENRE_ID = genres.GENRE_ID ORDER BY ID DESC"; //выбираем все (*) из таблиц books, book_author, authors, genres сортируем (ORDER) по id  в обратном порядке (DESC)
     $result = mysqli_query($link, $query);
 
     if (!$result)
