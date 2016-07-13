@@ -21,7 +21,7 @@
             <?php if (empty($book['BOOK_DESCRIPTION']))
                 echo '<i>Нет описания. Вы можете добавить его, нажав кнопку "Редактировать"</i>';
             else
-                echo $book['description']; ?>
+                echo $book['BOOK_DESCRIPTION']; ?>
         </div>
         <div class="default__line"></div>
         <div class="default__bookInfo">
