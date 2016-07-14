@@ -94,11 +94,11 @@ function relation_exists($book_id, $author_id) //проверка существ
     return false;
 }
 
-function set_relations($book_id, $author_id) //установить связь книга-автор
+function set_relations($book_id, $author_id, $author_priority) //установить связь книга-автор
 {
     //request
-    $sql = "INSERT INTO book_author (BOOK_ID, AUTHOR_ID) VALUES ('%s', '%s')";
-    $query = sprintf($sql, mysqli_real_escape_string($_SESSION['link'], $book_id), mysqli_real_escape_string($_SESSION['link'], $author_id));
+    $sql = "INSERT INTO book_author (BOOK_ID, AUTHOR_ID, AUTHOR_PRIORITY) VALUES ('%s', '%s', '%s')";
+    $query = sprintf($sql, mysqli_real_escape_string($_SESSION['link'], $book_id), mysqli_real_escape_string($_SESSION['link'], $author_id), mysqli_real_escape_string($_SESSION['link'], $author_priority));
     $result = mysqli_query($_SESSION['link'], $query);
     if (!$result) die(mysqli_error($_SESSION['link']));
     return mysqli_affected_rows($_SESSION['link']);
@@ -137,6 +137,7 @@ function update_relations($book_id, $new_authors_list) //обновить свя
         }
     }
     //добавление новых авторов и создание новых связей
+    $author_priority = 0; //сохранение порядка авторов
     foreach ($new_authors_array as $new_author) {
         //echo $new_author.' =? ';
         $new_author_confirmed = true;
@@ -149,7 +150,8 @@ function update_relations($book_id, $new_authors_list) //обновить свя
             }
         }
         if ($new_author_confirmed) {
-            set_author($book_id, $new_author);
+            set_author($book_id, $new_author, $author_priority);
+            $author_priority++;
             $_SESSION['active'] = false;
         }
     }
@@ -296,21 +298,23 @@ function set_authors($book_id, $author_string) //разбирает строку
     if ($author_string != '') {
         $authors_array = parse_input($author_string); //здесь строка с авторами будет разобрана в массив.
         //цикл, перебирающий массив с авторами:
+        $author_priority = 0;
         foreach ($authors_array as $single_author) {
-            set_author($book_id, $single_author);
+            set_author($book_id, $single_author, $author_priority);
+            $author_priority++;
         }
     }
     return true;
 }
 
-function set_author($book_id, $single_author) //проверяет существование автора в базе, новых добавляет.
+function set_author($book_id, $single_author, $author_priority) //проверяет существование автора в базе, новых добавляет.
 {
     if (!author_exists($single_author))
         $current_author_id = add_author($single_author);
     else $current_author_id = get_author_id($single_author);//если автор существует, вернуть id и добавить запись о новом отношении
     //vd($new_author_id);
     if (!relation_exists($book_id, $current_author_id))
-        set_relations($book_id, $current_author_id);
+        set_relations($book_id, $current_author_id, $author_priority);
     return true;
 }
 
