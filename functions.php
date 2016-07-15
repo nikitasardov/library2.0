@@ -146,7 +146,7 @@ function update_relations($book_id, $new_authors_list) //обновить свя
             if ($current_author == $new_author) {
                 $new_author_confirmed = false;
                 //echo $current_author.' not new<br>';
-                //  break;
+                break;
             }
         }
         if ($new_author_confirmed) {
